@@ -1,0 +1,50 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  // TypeScript 7(原生編譯器)設定:
+  // 只做「型別檢查」(noEmit);實際輸出由 esbuild 打包,速度快且可單檔化。
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",                      /* TypeScript 原始碼目錄 */
+    // "outDir": "./dist",                      /* 編譯後的 JS 檔案輸出目錄 */
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext",                       /* 採用 Node.js 現代模組規範 (ESM) */
+    "target": "esnext",                         /* 編譯後的 JS 語法版本 */
+    // For nodejs:
+    "lib": ["esnext"],                          /* 編譯時使用的 JS 標準函式庫 */
+    "types": ["node"],                          /* 編譯時使用的 Node.js 型別定義檔 */
+    "noEmit": true,                             /* 只做型別檢查，不輸出 JS 檔案 */
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,                          /* 產生對應的 source map 檔案 */
+    "declaration": true,                        /* 產生對應的型別定義檔案 (.d.ts) */
+    "declarationMap": true,                     /* 產生對應的型別定義檔案 (.d.ts) 的 source map 檔案 */
+
+    // Style Options
+    "noImplicitReturns": true,                  /* 函式必須有 return 或 throw */
+    "noImplicitOverride": true,                 /* 子類別覆寫父類別方法時，必須加上 override 關鍵字 */
+    "noUnusedLocals": true,                     /* 變數、函式、參數未使用時，編譯器會報錯 */
+    "noUnusedParameters": true,                 /* 函式參數未使用時，編譯器會報錯 */
+    "noFallthroughCasesInSwitch": true,         /* switch case 必須有 break 或 return */
+    "noPropertyAccessFromIndexSignature": true, /* 禁止使用索引簽名存取物件屬性 (obj['prop'])，必須使用點語法 (obj.prop) */
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,           /* 限制使用索引簽名存取物件屬性 (obj['prop'])，必須先檢查是否存在 (obj.hasOwnProperty('prop')) */
+    "exactOptionalPropertyTypes": true,         /* 限制可選屬性 (obj.prop?) 的型別，必須與定義的型別一致 (obj.prop?: string | undefined) */
+
+    // Recommended Options
+    "strict": true,                           /* 開啟嚴格型別檢查，減少 Bug */
+    "jsx": "react-jsx",                       /* React JSX 語法支援 */
+    //"verbatimModuleSyntax": true,           /* 讓 TypeScript 保留原始的 import/export 語法，避免自動轉換成 CommonJS ; 當 verbatimModuleSyntax: true，而 TypeScript 判定目前編輯的檔案屬於 CommonJS (CJS) 模組，但在檔案中你卻使用了 ECMAScript (ESM) 的 import 或 export 語法時會出錯*/
+    "isolatedModules": true,                  /* 每個檔案都是獨立的模組，避免跨檔案的型別依賴 */
+    "noUncheckedSideEffectImports": true,     /* 禁止未使用的副作用匯入 (import 'module')，避免不必要的程式碼執行 */
+    "moduleDetection": "force",               /* 強制 TypeScript 將所有檔案視為模組，避免全域變數污染 */
+    "skipLibCheck": true,                     /* 跳過第三方套件的型別檢查，加快編譯速度 */
+    "erasableSyntaxOnly": true,               /* 只保留可刪除的語法，避免編譯後的程式碼與原始碼差異過大 */
+    "esModuleInterop": true,                  /* 完美相容 CJS 套件 (如部份舊版 express 插件) */
+    "forceConsistentCasingInFileNames": true, /* 確保 Windows (不區分大小寫) 與 Linux 檔案命名一致 */
+  },
+  "include": ["src"]                          /* 編譯時包含的檔案或目錄 */
+}

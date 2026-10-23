@@ -1,0 +1,29 @@
+{
+  "name": "imusic-server",
+  "version": "1.0.0",
+  "description": "在 Windows 上以 **Node.js + Express + TypeScript 7** 自建的 **WebDAV 音樂伺服器**(HTTPS)",
+  "main": "index.js",
+  "scripts": {
+    "dummy": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/app.ts",
+    "start": "tsx src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polinwei/iMusic-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/polinwei/iMusic-server/issues"
+  },
+  "homepage": "https://github.com/polinwei/iMusic-server#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
