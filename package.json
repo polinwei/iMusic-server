@@ -2,11 +2,11 @@
   "name": "imusic-server",
   "version": "1.0.0",
   "description": "在 Windows 上以 **Node.js + Express + TypeScript 7** 自建的 **WebDAV 音樂伺服器**(HTTPS)",
-  "main": "index.js",
   "scripts": {
     "dummy": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/app.ts",
-    "start": "tsx src/app.ts"
+    "start": "tsx src/app.ts",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

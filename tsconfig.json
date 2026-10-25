@@ -28,7 +28,7 @@
     "noUnusedLocals": true,                     /* 變數、函式、參數未使用時，編譯器會報錯 */
     "noUnusedParameters": true,                 /* 函式參數未使用時，編譯器會報錯 */
     "noFallthroughCasesInSwitch": true,         /* switch case 必須有 break 或 return */
-    "noPropertyAccessFromIndexSignature": true, /* 禁止使用索引簽名存取物件屬性 (obj['prop'])，必須使用點語法 (obj.prop) */
+    //"noPropertyAccessFromIndexSignature": true, /* 禁止使用索引簽名存取物件屬性 (obj['prop'])，必須使用點語法 (obj.prop) */
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,           /* 限制使用索引簽名存取物件屬性 (obj['prop'])，必須先檢查是否存在 (obj.hasOwnProperty('prop')) */
