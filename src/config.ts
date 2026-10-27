@@ -38,7 +38,7 @@ const DEFAULTS = {
   certDir: 'certs',
   openBrowser: true,
   auth: {
-    enabled: false,
+    enabled: true,
     username: 'admin',
     password: 'admin',
   },

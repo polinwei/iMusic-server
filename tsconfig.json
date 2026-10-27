@@ -26,7 +26,7 @@
     "noImplicitReturns": true,                  /* 函式必須有 return 或 throw */
     "noImplicitOverride": true,                 /* 子類別覆寫父類別方法時，必須加上 override 關鍵字 */
     "noUnusedLocals": true,                     /* 變數、函式、參數未使用時，編譯器會報錯 */
-    "noUnusedParameters": true,                 /* 函式參數未使用時，編譯器會報錯 */
+    //"noUnusedParameters": true,                 /* 函式參數未使用時，編譯器會報錯 */
     "noFallthroughCasesInSwitch": true,         /* switch case 必須有 break 或 return */
     //"noPropertyAccessFromIndexSignature": true, /* 禁止使用索引簽名存取物件屬性 (obj['prop'])，必須使用點語法 (obj.prop) */
 

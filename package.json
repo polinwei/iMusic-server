@@ -2,28 +2,42 @@
   "name": "imusic-server",
   "version": "1.0.0",
   "description": "在 Windows 上以 **Node.js + Express + TypeScript 7** 自建的 **WebDAV 音樂伺服器**(HTTPS)",
+  "keywords": [],
+  "author": "Polin WEI",
+  "license": "ISC",
   "scripts": {
     "dummy": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/app.ts",
     "start": "tsx src/app.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build:exe": "npm run typecheck && npm run lint && node scripts/build-exe.mjs",
+    "start:exe": "release/iMusic-server.exe",
+    "typecheck:ts6": "tsc6 --noEmit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/polinwei/iMusic-server.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/polinwei/iMusic-server/issues"
   },
   "homepage": "https://github.com/polinwei/iMusic-server#readme",
+  "dependencies": {
+    "express": "^5.3.0",
+    "selfsigned": "^5.5.0"
+  },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.5",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "postject": "^1.0.0-alpha.6",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.72.1"
   }
 }
