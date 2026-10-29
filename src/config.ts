@@ -4,9 +4,9 @@
  * - 開發模式則放在專案根目錄(目前工作目錄)
  * - 第一次執行若找不到 config.json,會自動產生預設值
  */
-import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, isAbsolute, join, resolve } from 'path';
-import { isSea } from 'node:sea';
+import { existsSync, readFileSync, writeFileSync } from 'fs'; // 讀寫檔案
+import { dirname, isAbsolute, join, resolve } from 'path';    // 取得路徑
+import { isSea } from 'node:sea';                             // 判斷是否為 Node SEA 封裝後的 exe(單一執行檔應用程式)
 
 /** 建立WebDAV 認證設定: AuthConfig 物件 */
 export interface AuthConfig {

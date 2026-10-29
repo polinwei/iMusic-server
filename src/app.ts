@@ -8,22 +8,54 @@
  *   /dav/*   WebDAV(給 WebDAV 用戶端)
  */
 
-import express, { type Express, type Request, type Response } from 'express';
-import { loadConfig } from './config';
-import { mkdirSync } from 'fs';
+import express, { type Express, type Request, type Response, type ErrorRequestHandler } from 'express'; // Express 框架
+import { isPackaged ,loadConfig } from './config';// 讀取設定檔
+import { mkdirSync } from 'fs';                   //  建立目錄
+import { join } from 'path';                      // 取得路徑
+import { embeddedStatic } from './static-assets'; // 內嵌靜態網頁資源
+import { createWebRouter } from './routes/web';    // 建立 Web 路由
+
+/** 開發模式的網頁資源位置(exe 模式的網頁已嵌入執行檔內,見 static-assets.ts) */
+const webRoot = join(__dirname, '..' ,'public');
+
+const errorHandler: ErrorRequestHandler = (err: unknown, req: Request, res: Response, next) => {
+  console.error('請求處理錯誤:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ error: '伺服器內部錯誤' });
+  } else {
+    next(err);
+  }
+}
+
+async function main(): Promise<void> {
+  const config = loadConfig(); // 讀取設定檔,若不存在則建立預設值
+  mkdirSync(config.musicDir, { recursive: true });
+
+  const app: Express = express(); // 建立 Express 應用程式
+  app.disable('x-powered-by');    // 移除 Express 預設的 X-Powered-By 標頭,避免洩漏資訊
+  app.use((_req, res, next) => {
+    res.set('X-Content-Type-Options', 'nosniff'); // 防止瀏覽器 MIME 類型嗅探,強制使用 Content-Type 標頭指定的類型
+    next();
+  });
+
+  //app.use(createWebRouter()); // Web 路由
+  app.use(isPackaged ? embeddedStatic() : express.static(webRoot)); // 靜態網頁資源
+  app.use(errorHandler); // 全域錯誤處理 middleware
 
 
-const app: Express = express();
-const config = loadConfig();
-mkdirSync(config.musicDir, { recursive: true });
 
+  await new Promise<void>((resolve) => {
+    const localUrl = `http://localhost:3000`;
+    app.listen(3000, () => {
+      console.log(`⚡️[server]: Server is running at ${localUrl}`);
+      resolve();
+    });
+  });
+}
 
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
-
-const localUrl = `http://localhost:3000`;
-app.listen(3000, () => {
-  console.log(`⚡️[server]: Server is running at ${localUrl}`);
+main().catch((error:unknown) => {
+  console.error('應用程式執行錯誤:', error);
+  console.error('請關閉此視窗,修正問題後再重新執行。');
+  // 保持系統執行存活一段時間,避免雙擊執行時視窗瞬間關閉而看不到錯誤訊息
+  setTimeout(() => process.exit(1), 10000);
 });

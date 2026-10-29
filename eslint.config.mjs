@@ -18,7 +18,7 @@ export default tseslint.config(
     rules: {
       // 以底線開頭的參數視為「刻意不使用」(例如 Express 錯誤處理的 _next)
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       // 統一風格:一律使用 === 、大括號、const

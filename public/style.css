@@ -1,0 +1,68 @@
+:root {
+  --bg: #fafafa;
+  --fg: #1c1c1e;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --line: #e5e7eb;
+  --card: #ffffff;
+  --danger: #dc2626;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121214;
+    --fg: #f2f2f3;
+    --muted: #9ca3af;
+    --accent: #60a5fa;
+    --line: #2a2a2e;
+    --card: #1c1c1f;
+    --danger: #f87171;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.5 system-ui, "Microsoft JhengHei", "PingFang TC", sans-serif;
+}
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 12px 16px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.now-playing {
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 8px;
+}
+audio { width: 100%; }
+main { max-width: 900px; margin: 0 auto; padding: 16px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.toolbar input[type="text"] {
+  flex: 1 1 220px; padding: 6px 8px; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+}
+button {
+  padding: 6px 12px; cursor: pointer; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+}
+button:hover { border-color: var(--accent); }
+.status { color: var(--muted); font-size: 0.9rem; }
+.status.error { color: var(--danger); }
+.group h2 { margin: 20px 0 6px; font-size: 0.95rem; color: var(--muted); }
+.group ul { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.track { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.track:last-child { border-bottom: 0; }
+.track.playing { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.track .name { flex: 1; min-width: 0; text-align: left; border: 0; background: none; padding: 4px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track.playing .name { color: var(--accent); font-weight: 600; }
+.track .size { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+.track a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+.track .del { color: var(--danger); font-size: 0.85rem; padding: 2px 8px; }
+.empty { color: var(--muted); text-align: center; padding: 40px 0; }

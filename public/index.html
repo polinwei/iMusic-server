@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iMusic-server</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 頁面最上方:第一行固定顯示「目前播放的音樂名稱」 -->
+    <header class="top">
+      <div id="nowPlaying" class="now-playing">♪ 目前播放:(尚未選擇)</div>
+      <audio id="player" controls preload="none"></audio>
+    </header>
+
+    <main>
+      <section class="toolbar">
+        <button id="refreshBtn" type="button">重新整理</button>
+        <input id="uploadDir" type="text" placeholder="上傳到子資料夾(可留空,例如 Jazz/2024)" />
+        <input id="uploadInput" type="file" accept="audio/*,.flac,.m4a,.opus" multiple />
+        <button id="uploadBtn" type="button">上傳</button>
+        <span id="status" class="status"></span>
+      </section>
+
+      <section id="list" class="list" aria-live="polite"></section>
+    </main>
+
+    <script src=""></script>
+  </body>
+</html>
