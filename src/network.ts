@@ -2,7 +2,7 @@
 import { networkInterfaces } from 'os';
 
 /** 獲取本機 IP 地址 */
-export function getLocalIPs(): string[] {
+export function getLanAddresses(): string[] {
   const addresses: string[] = [];
   for (const infos of Object.values(networkInterfaces())) { // 取得所有網路介面資訊
     for (const info of infos ?? []) {

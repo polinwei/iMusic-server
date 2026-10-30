@@ -13,9 +13,11 @@ import { isPackaged ,loadConfig } from './config';// 讀取設定檔
 import { mkdirSync } from 'fs';                   //  建立目錄
 import { join } from 'path';                      // 取得路徑
 import { embeddedStatic } from './middlewares/static-assets'; // 內嵌靜態網頁資源
-import { createWebRouter } from './routes/web';    // 建立 Web 路由
-import { getLocalIPs } from './network'; // 取得本機區域網路的 IPv4 位址
-import { basicAuth } from '@/middlewares/auth'; // HTTP Basic 驗證中介層
+import { createWebRouter } from './routes/web';   // 建立 Web 路由
+import { getLanAddresses } from './network';      // 取得本機區域網路的 IPv4 位址
+import { basicAuth } from '@/middlewares/auth';   // HTTP Basic 驗證中介層
+import { createServer } from 'https';
+import { ensureCertificate } from './ssl';
 
 /** 開發模式的網頁資源位置(exe 模式的網頁已嵌入執行檔內,見 static-assets.ts) */
 const webRoot = join(__dirname, '..' ,'public');
@@ -40,26 +42,27 @@ async function main(): Promise<void> {
     next();
   });
 
-  app.use(basicAuth(config.auth)); // HTTP Basic 驗證
+  app.use(basicAuth(config.auth)); // HTTP Basic 驗證, 所有路由都需通過驗證
   app.use(createWebRouter()); // Web 路由
   app.use(isPackaged ? embeddedStatic() : express.static(webRoot)); // 靜態網頁資源
   app.use(errorHandler); // 全域錯誤處理 middleware
 
   // 啟動伺服器
+  const tls = await ensureCertificate(config.certDir);
+  const server = createServer(tls, app);
   await new Promise<void>((resolve, reject) => {
-    app.once('error', reject); // 例如連接埠被占用 (EADDRINUSE)
-    app.listen(config.port, config.host);
-    resolve();
+    server.once('error', reject); // 例如連接埠被占用 (EADDRINUSE)
+    server.listen(config.port, config.host, resolve);
   });
 
-  const localUrl = `http://localhost:${String(config.port)}`;
+  const localUrl = `https://localhost:${String(config.port)}`;
   console.log('========================================');
   console.log(' iMusic-server 已啟動');
   console.log(` 音樂目錄:${config.musicDir}`);
   console.log(` 網頁:    ${localUrl}`);
   console.log(` 測試網頁:${localUrl}/test`);
-  for (const ip of getLocalIPs()) {
-    console.log(` 局域網:  http://${ip}:${String(config.port)}`);
+  for (const ip of getLanAddresses()) {
+    console.log(` 局域網:  https://${ip}:${String(config.port)}`);
   }
   console.log('========================================');
 }
