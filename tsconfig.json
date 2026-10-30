@@ -9,7 +9,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",                       /* 採用 Node.js 現代模組規範 (ESM) */
+    "module": "ESNext",                       /* 採用 Node.js 現代模組規範 (ESM) */
+    "moduleResolution": "bundler",              // 允許省略 .ts / .js 擴充檔名, 設定要由 "module": "nodenext" 改為 "ESNext"
     "target": "esnext",                         /* 編譯後的 JS 語法版本 */
     // For nodejs:
     "lib": ["esnext"],                          /* 編譯時使用的 JS 標準函式庫 */
@@ -45,6 +46,9 @@
     "erasableSyntaxOnly": true,               /* 只保留可刪除的語法，避免編譯後的程式碼與原始碼差異過大 */
     "esModuleInterop": true,                  /* 完美相容 CJS 套件 (如部份舊版 express 插件) */
     "forceConsistentCasingInFileNames": true, /* 確保 Windows (不區分大小寫) 與 Linux 檔案命名一致 */
+    "paths": {
+      "@/*": ["./src/*"]                      /* 設定路徑別名，避免 ../../../ 這種地獄路徑 */
+    }
   },
-  "include": ["src"]                          /* 編譯時包含的檔案或目錄 */
+  "include": ["src/**/*"]                     /* 編譯時包含的檔案或目錄, 支援無限層級 */
 }

@@ -1,5 +1,11 @@
 // ESLint 9 flat config:使用 typescript-eslint 最嚴格的「型別感知」規則集,
 // 檢查 TypeScript 的各種寫作風格與常見錯誤(如 Promise 未處理、any 濫用、不必要的條件判斷等)。
+// 強制重啟服務（最重要）
+// 改完 tsconfig.json & eslint.config.mjs 後 ，編輯器通常需要被「踢一下」才會套用新規則。請務必在 VS Code 中執行：
+// 1. 按下 Ctrl + Shift + P（Mac 為 Cmd + Shift + P）。
+// 2. 輸入並執行 TypeScript: Restart TS Server。
+// 3. 再次開啟命令面板，輸入並執行 ESLint: Restart ESLint Server
+
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 

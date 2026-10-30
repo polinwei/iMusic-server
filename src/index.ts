@@ -12,8 +12,10 @@ import express, { type Express, type Request, type Response, type ErrorRequestHa
 import { isPackaged ,loadConfig } from './config';// 讀取設定檔
 import { mkdirSync } from 'fs';                   //  建立目錄
 import { join } from 'path';                      // 取得路徑
-import { embeddedStatic } from './static-assets'; // 內嵌靜態網頁資源
+import { embeddedStatic } from './middlewares/static-assets'; // 內嵌靜態網頁資源
 import { createWebRouter } from './routes/web';    // 建立 Web 路由
+import { getLocalIPs } from './network'; // 取得本機區域網路的 IPv4 位址
+import { basicAuth } from '@/middlewares/auth'; // HTTP Basic 驗證中介層
 
 /** 開發模式的網頁資源位置(exe 模式的網頁已嵌入執行檔內,見 static-assets.ts) */
 const webRoot = join(__dirname, '..' ,'public');
@@ -38,21 +40,31 @@ async function main(): Promise<void> {
     next();
   });
 
-  //app.use(createWebRouter()); // Web 路由
+  app.use(basicAuth(config.auth)); // HTTP Basic 驗證
+  app.use(createWebRouter()); // Web 路由
   app.use(isPackaged ? embeddedStatic() : express.static(webRoot)); // 靜態網頁資源
   app.use(errorHandler); // 全域錯誤處理 middleware
 
-
-
-  await new Promise<void>((resolve) => {
-    const localUrl = `http://localhost:3000`;
-    app.listen(3000, () => {
-      console.log(`⚡️[server]: Server is running at ${localUrl}`);
-      resolve();
-    });
+  // 啟動伺服器
+  await new Promise<void>((resolve, reject) => {
+    app.once('error', reject); // 例如連接埠被占用 (EADDRINUSE)
+    app.listen(config.port, config.host);
+    resolve();
   });
+
+  const localUrl = `http://localhost:${String(config.port)}`;
+  console.log('========================================');
+  console.log(' iMusic-server 已啟動');
+  console.log(` 音樂目錄:${config.musicDir}`);
+  console.log(` 網頁:    ${localUrl}`);
+  console.log(` 測試網頁:${localUrl}/test`);
+  for (const ip of getLocalIPs()) {
+    console.log(` 局域網:  http://${ip}:${String(config.port)}`);
+  }
+  console.log('========================================');
 }
 
+// 執行主程式後,若發生錯誤則輸出訊息並延遲退出,避免雙擊執行時視窗瞬間關閉而看不到錯誤訊息
 main().catch((error:unknown) => {
   console.error('應用程式執行錯誤:', error);
   console.error('請關閉此視窗,修正問題後再重新執行。');

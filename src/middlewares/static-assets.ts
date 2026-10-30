@@ -25,12 +25,12 @@ export function embeddedStatic(): RequestHandler {
       next(); // 只處理 GET 與 HEAD 請求,其他交給下一個 middleware
       return;
     }
-    const name = req.path === '/' ? '/index.html' : req.path.slice(1); // 去掉開頭的 '/'
+    const name = req.path === '/' ? 'index.html' : req.path.slice(1); // 去掉開頭的 '/'
     let data: ArrayBuffer | undefined;
     try {
       data = getAsset(`public/${name}`); // 從 exe 內嵌資源讀取檔案
-    } catch (err) {
-      next(err); // 找不到內嵌資源, 交給後面的處理(最後會是404)
+    } catch {
+      next(); // 找不到內嵌資源, 交給後面的處理(最後會是404)
       return;
     }
     res.set('Content-Type', MIME_TYPES[extname(name)] ?? 'application/octet-stream'); // 設定 Content-Type

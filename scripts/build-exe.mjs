@@ -1,6 +1,6 @@
 // 打包成 Windows 單一 exe(Node.js SEA:Single Executable Application)
 // 流程:
-// 1. esbuild 把 src/app.ts 與所有相依套件合併為單一 dist/app.cjs
+// 1. esbuild 把 src/index.ts 與所有相依套件合併為單一 dist/server.cjs
 // 2. 產生 SEA 設定,把 public/ 內的網頁檔列為 assets 嵌入
 // 3. node --experimental-sea-config 產生 blob
 // 4. 複製目前的 node.exe,用 postject 把 blob 注入,得到 release/iMusic-server.exe
@@ -22,12 +22,12 @@ mkdirSync('dist', { recursive: true });
 mkdirSync('release', { recursive: true });
 
 await build({
-  entryPoints: ['src/app.ts'],
+  entryPoints: ['src/index.ts'],
   bundle: true,
   platform: 'node',
   target: 'node20',
   format: 'cjs',
-  outfile: 'dist/app.cjs',
+  outfile: 'dist/server.cjs',
   logLevel: 'info',
 });
 
@@ -38,7 +38,7 @@ for (const file of readdirSync('public')) {
 writeFileSync(
   'dist/sea-config.json',
   JSON.stringify({
-    main: 'dist/app.cjs',
+    main: 'dist/server.cjs',
     output: 'dist/sea-prep.blob',
     disableExperimentalSEAWarning: true,
     assets,
