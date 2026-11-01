@@ -1,7 +1,7 @@
 // iMusic-server 前端(純原生 JavaScript,無任何框架)
 'use strict';
 
-const $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id); 
 const player = $('player');
 const nowPlaying = $('nowPlaying');
 const listEl = $('list');

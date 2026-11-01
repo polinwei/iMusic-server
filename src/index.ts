@@ -16,20 +16,13 @@ import { embeddedStatic } from './middlewares/static-assets'; // 內嵌靜態網
 import { createWebRouter } from './routes/web';   // 建立 Web 路由
 import { getLanAddresses } from './network';      // 取得本機區域網路的 IPv4 位址
 import { basicAuth } from '@/middlewares/auth';   // HTTP Basic 驗證中介層
-import { createServer } from 'https';
-import { ensureCertificate } from './ssl';
+import { createErrorHandler } from '@/middlewares/error-handler'; // 全域錯誤處理中介層
+import { createServer } from 'https';             // 建立 HTTPS 伺服器
+import { ensureCertificate } from './ssl';        // 產生自簽憑證
+import { createApiRouter } from './routes/api';   // 建立讀取音樂目錄 Music 的 REST API 路由
 
 /** 開發模式的網頁資源位置(exe 模式的網頁已嵌入執行檔內,見 static-assets.ts) */
 const webRoot = join(__dirname, '..' ,'public');
-
-const errorHandler: ErrorRequestHandler = (err: unknown, req: Request, res: Response, next) => {
-  console.error('請求處理錯誤:', err);
-  if (!res.headersSent) {
-    res.status(500).json({ error: '伺服器內部錯誤' });
-  } else {
-    next(err);
-  }
-}
 
 async function main(): Promise<void> {
   const config = loadConfig(); // 讀取設定檔,若不存在則建立預設值
@@ -42,10 +35,11 @@ async function main(): Promise<void> {
     next();
   });
 
-  app.use(basicAuth(config.auth)); // HTTP Basic 驗證, 所有路由都需通過驗證
+  app.use(basicAuth(config.auth)); // middleware: HTTP Basic 驗證, 所有路由都需通過驗證
   app.use(createWebRouter()); // Web 路由
+  app.use('/api', createApiRouter(config.musicDir)); // 讀取音樂目錄 Music 的 REST API 路由
   app.use(isPackaged ? embeddedStatic() : express.static(webRoot)); // 靜態網頁資源
-  app.use(errorHandler); // 全域錯誤處理 middleware
+  app.use(createErrorHandler()); // middleware: 全域錯誤處理
 
   // 啟動伺服器
   const tls = await ensureCertificate(config.certDir);
