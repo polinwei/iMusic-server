@@ -15,3 +15,12 @@ export function createErrorHandler(): ErrorRequestHandler {
     }
   };
 }
+// 也可以直接 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => { ... }
+export const errorHandler: ErrorRequestHandler = (err: unknown, req: Request, res: Response, next) => {
+  console.error('請求處理錯誤:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ error: '伺服器內部錯誤' });
+  } else {
+    next(err);
+  }
+};

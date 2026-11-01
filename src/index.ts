@@ -8,7 +8,7 @@
  *   /dav/*   WebDAV(給 WebDAV 用戶端)
  */
 
-import express, { type Express, type Request, type Response, type ErrorRequestHandler } from 'express'; // Express 框架
+import express, { type Express } from 'express'; // Express 框架
 import { isPackaged ,loadConfig } from './config';// 讀取設定檔
 import { mkdirSync } from 'fs';                   //  建立目錄
 import { join } from 'path';                      // 取得路徑
@@ -20,6 +20,7 @@ import { createErrorHandler } from '@/middlewares/error-handler'; // 全域錯�
 import { createServer } from 'https';             // 建立 HTTPS 伺服器
 import { ensureCertificate } from './ssl';        // 產生自簽憑證
 import { createApiRouter } from './routes/api';   // 建立讀取音樂目錄 Music 的 REST API 路由
+import { createWebDavHandler } from './routes/webdav'; // 建立 WebDAV 路由
 
 /** 開發模式的網頁資源位置(exe 模式的網頁已嵌入執行檔內,見 static-assets.ts) */
 const webRoot = join(__dirname, '..' ,'public');
@@ -38,6 +39,7 @@ async function main(): Promise<void> {
   app.use(basicAuth(config.auth)); // middleware: HTTP Basic 驗證, 所有路由都需通過驗證
   app.use(createWebRouter()); // Web 路由
   app.use('/api', createApiRouter(config.musicDir)); // 讀取音樂目錄 Music 的 REST API 路由
+  app.use('/dav', createWebDavHandler(config.musicDir, '/dav')); // WebDAV 路由
   app.use(isPackaged ? embeddedStatic() : express.static(webRoot)); // 靜態網頁資源
   app.use(createErrorHandler()); // middleware: 全域錯誤處理
 
@@ -54,9 +56,13 @@ async function main(): Promise<void> {
   console.log(' iMusic-server 已啟動');
   console.log(` 音樂目錄:${config.musicDir}`);
   console.log(` 網頁:    ${localUrl}`);
+  console.log(` WebDAV:  ${localUrl}/dav/`);
   console.log(` 測試網頁:${localUrl}/test`);
   for (const ip of getLanAddresses()) {
     console.log(` 局域網:  https://${ip}:${String(config.port)}`);
+  }
+  if (config.auth.enabled) {
+    console.log(` 帳號:${config.auth.username}(密碼請見 config.json,建議修改)`);
   }
   console.log('========================================');
 }
